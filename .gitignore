@@ -1,0 +1,24 @@
+# dependências / build
+node_modules/
+dist/
+coverage/
+.tmp/
+tmp/
+# ambiente
+.env
+.env.*
+# uploads temporários
+tmp/
+# logs
+logs/
+*.log
+npm-debug.log*
+pnpm-debug.log*
+# editor/IDE
+.vscode/
+.idea/
+.DS_Store
+# Docker
+docker/*.env
+# testes
+jest-html-reporters-*.html
