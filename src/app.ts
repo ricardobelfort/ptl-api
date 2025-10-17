@@ -16,6 +16,14 @@ app.use(morgan(env.NODE_ENV === 'production' ? 'combined' : 'dev'));
 app.use('/api/v1', routes);
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, { explorer: true }));
 
+app.get('/', (_req, res) => {
+  res.json({
+    name: 'Painel Trabalhando a Liberdade (PTL) API',
+    version: '1.0.0',
+    docs: '/docs'
+  });
+});
+
 // 404
 app.use((req, res) => res.status(404).json({ message: 'Not Found' }));
 
