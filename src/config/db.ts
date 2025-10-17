@@ -1,10 +1,9 @@
 import mongoose from 'mongoose';
-import { env } from './env';
+import { env } from '@/config/env';
 
 export async function connectDB() {
-  await mongoose.connect(env.MONGODB_URI, {
-    serverSelectionTimeoutMS: 10000
-  } as any);
-  mongoose.set('strictQuery', true);
-  return mongoose.connection;
+  if (mongoose.connection.readyState === 0) {
+    await mongoose.connect(env.MONGODB_URI);
+    console.log('✅ MongoDB conectado');
+  }
 }

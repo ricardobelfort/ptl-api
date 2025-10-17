@@ -1,7 +1,21 @@
-import jwt, { SignOptions } from 'jsonwebtoken';
 import { env } from '../config/env';
+import jwt, { SignOptions } from 'jsonwebtoken';
 
-export function signAccessToken(payload: object): string {
-  const options: SignOptions = { expiresIn: 900 }; // 15 minutos
+export interface JWTPayload {
+  sub: string;
+  perfil: 'admin' | 'gestor_regional' | 'gestor_unidade' | 'auditor';
+  unidadeCodigo?: string;
+  regioes?: string[];
+}
+
+export function signAccessToken(payload: JWTPayload): string {
+  // converte string numérica para number (ex: "3600" -> 3600)
+  const expiresIn: SignOptions['expiresIn'] =
+    /^\d+$/.test(env.JWT_EXPIRES_IN)
+      ? Number(env.JWT_EXPIRES_IN)
+      : (env.JWT_EXPIRES_IN as any); // string tipo "15m", "1h", etc.
+
+  const options: SignOptions = { expiresIn };
+
   return jwt.sign(payload, env.JWT_SECRET as jwt.Secret, options);
 }
