@@ -1,0 +1,488 @@
+{
+  "info": {
+    "name": "PTL API - Refresh Token System",
+    "description": "Collection para testar o sistema completo de refresh tokens",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:3000",
+      "type": "string"
+    },
+    {
+      "key": "access_token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "refresh_token",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{access_token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "1. Login (Get Tokens)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@ptl.local\",\n  \"password\": \"admin123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "auth", "login"]
+            },
+            "description": "Autentica o usuário e obtém access_token + refresh_token"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// Salvar tokens automaticamente após login bem-sucedido",
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    ",
+                  "    pm.environment.set('access_token', response.access_token);",
+                  "    pm.environment.set('refresh_token', response.refresh_token);",
+                  "    ",
+                  "    console.log('✅ Access token salvo: ' + response.access_token.substring(0, 20) + '...');",
+                  "    console.log('✅ Refresh token salvo: ' + response.refresh_token.substring(0, 20) + '...');",
+                  "    ",
+                  "    // Testes de validação",
+                  "    pm.test('Status code é 200', function () {",
+                  "        pm.response.to.have.status(200);",
+                  "    });",
+                  "    ",
+                  "    pm.test('Resposta contém access_token', function () {",
+                  "        pm.expect(response).to.have.property('access_token');",
+                  "    });",
+                  "    ",
+                  "    pm.test('Resposta contém refresh_token', function () {",
+                  "        pm.expect(response).to.have.property('refresh_token');",
+                  "    });",
+                  "    ",
+                  "    pm.test('Resposta contém dados do usuário', function () {",
+                  "        pm.expect(response).to.have.property('user');",
+                  "        pm.expect(response.user).to.have.property('email');",
+                  "    });",
+                  "} else {",
+                  "    console.log('❌ Login falhou: ' + pm.response.text());",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "2. Refresh Tokens",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refresh_token\": \"{{refresh_token}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/auth/refresh",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "auth", "refresh"]
+            },
+            "description": "Renova ambos os tokens usando refresh_token válido"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// Atualizar tokens após refresh bem-sucedido",
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    const oldAccessToken = pm.environment.get('access_token');",
+                  "    const oldRefreshToken = pm.environment.get('refresh_token');",
+                  "    ",
+                  "    pm.environment.set('access_token', response.access_token);",
+                  "    pm.environment.set('refresh_token', response.refresh_token);",
+                  "    ",
+                  "    console.log('🔄 Tokens renovados com sucesso!');",
+                  "    console.log('🆕 Novo access token: ' + response.access_token.substring(0, 20) + '...');",
+                  "    console.log('🆕 Novo refresh token: ' + response.refresh_token.substring(0, 20) + '...');",
+                  "    ",
+                  "    // Testes de validação",
+                  "    pm.test('Status code é 200', function () {",
+                  "        pm.response.to.have.status(200);",
+                  "    });",
+                  "    ",
+                  "    pm.test('Novos tokens são diferentes dos antigos', function () {",
+                  "        pm.expect(response.access_token).to.not.equal(oldAccessToken);",
+                  "        pm.expect(response.refresh_token).to.not.equal(oldRefreshToken);",
+                  "    });",
+                  "    ",
+                  "    pm.test('Resposta contém novos tokens', function () {",
+                  "        pm.expect(response).to.have.property('access_token');",
+                  "        pm.expect(response).to.have.property('refresh_token');",
+                  "    });",
+                  "} else {",
+                  "    console.log('❌ Refresh falhou: ' + pm.response.text());",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "3. Logout (Single Device)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refresh_token\": \"{{refresh_token}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/auth/logout",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "auth", "logout"]
+            },
+            "description": "Faz logout do dispositivo atual (revoga refresh token específico)"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    console.log('✅ Logout realizado com sucesso');",
+                  "    ",
+                  "    // Limpar tokens das variáveis",
+                  "    pm.environment.set('access_token', '');",
+                  "    pm.environment.set('refresh_token', '');",
+                  "    ",
+                  "    pm.test('Status code é 200', function () {",
+                  "        pm.response.to.have.status(200);",
+                  "    });",
+                  "    ",
+                  "    pm.test('Mensagem de sucesso retornada', function () {",
+                  "        const response = pm.response.json();",
+                  "        pm.expect(response).to.have.property('message');",
+                  "    });",
+                  "} else {",
+                  "    console.log('❌ Logout falhou: ' + pm.response.text());",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "4. Logout All (All Devices)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/auth/logout-all",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "auth", "logout-all"]
+            },
+            "description": "Faz logout de todos os dispositivos (revoga todos os refresh tokens do usuário)"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    console.log('🚪 Logout global realizado: ' + response.revoked_tokens + ' tokens revogados');",
+                  "    ",
+                  "    // Limpar tokens das variáveis",
+                  "    pm.environment.set('access_token', '');",
+                  "    pm.environment.set('refresh_token', '');",
+                  "    ",
+                  "    pm.test('Status code é 200', function () {",
+                  "        pm.response.to.have.status(200);",
+                  "    });",
+                  "    ",
+                  "    pm.test('Número de tokens revogados informado', function () {",
+                  "        pm.expect(response).to.have.property('revoked_tokens');",
+                  "    });",
+                  "} else {",
+                  "    console.log('❌ Logout global falhou: ' + pm.response.text());",
+                  "}"
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "description": "Endpoints de autenticação e gerenciamento de tokens"
+    },
+    {
+      "name": "Protected Endpoints",
+      "item": [
+        {
+          "name": "Test Access Token (Get Access Logs)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/logs/access",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "logs", "access"]
+            },
+            "description": "Testa se o access token está funcionando corretamente"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    console.log('✅ Access token válido - endpoint protegido acessado');",
+                  "    ",
+                  "    pm.test('Status code é 200', function () {",
+                  "        pm.response.to.have.status(200);",
+                  "    });",
+                  "    ",
+                  "    pm.test('Resposta contém dados', function () {",
+                  "        const response = pm.response.json();",
+                  "        pm.expect(response).to.be.an('object');",
+                  "    });",
+                  "} else if (pm.response.code === 401) {",
+                  "    console.log('❌ Access token inválido ou expirado');",
+                  "    console.log('💡 Execute o endpoint \"2. Refresh Tokens\" para renovar');",
+                  "} else {",
+                  "    console.log('❌ Erro inesperado: ' + pm.response.text());",
+                  "}"
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "description": "Endpoints que requerem autenticação para testar tokens"
+    },
+    {
+      "name": "Error Test Cases",
+      "item": [
+        {
+          "name": "Test Invalid Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"invalid@test.com\",\n  \"password\": \"wrongpassword\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "auth", "login"]
+            },
+            "description": "Testa login com credenciais inválidas"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Login inválido retorna 401', function () {",
+                  "    pm.response.to.have.status(401);",
+                  "});",
+                  "",
+                  "console.log('✅ Teste de credenciais inválidas funcionando corretamente');"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Test Invalid Refresh Token",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refresh_token\": \"invalid-refresh-token-123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/auth/refresh",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "auth", "refresh"]
+            },
+            "description": "Testa refresh com token inválido"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Refresh token inválido retorna 401', function () {",
+                  "    pm.response.to.have.status(401);",
+                  "});",
+                  "",
+                  "console.log('✅ Teste de refresh token inválido funcionando corretamente');"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Test Access Without Token",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/logs/access",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "logs", "access"]
+            },
+            "description": "Testa acesso a endpoint protegido sem token"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Acesso sem token retorna 401', function () {",
+                  "    pm.response.to.have.status(401);",
+                  "});",
+                  "",
+                  "console.log('✅ Proteção de endpoints funcionando corretamente');"
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "description": "Testes de casos de erro e validação de segurança"
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Script executado antes de cada requisição",
+          "console.log('🚀 Executando: ' + pm.info.requestName);"
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Script executado após cada requisição",
+          "console.log('⏱️ Tempo de resposta: ' + pm.response.responseTime + 'ms');"
+        ]
+      }
+    }
+  ]
+}
