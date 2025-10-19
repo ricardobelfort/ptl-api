@@ -6,12 +6,14 @@ import { env } from './config/env';
 import routes from './routes';
 import swaggerUi from 'swagger-ui-express';
 import { swaggerSpec } from './config/swagger';
+import { accessLogger } from './middlewares/access-logger';
 
 const app = express();
 app.use(helmet());
 app.use(cors({ origin: [/^https:\/\/.*\.vercel\.app$/, /http:\/\/localhost:\d+/], credentials: true }));
 app.use(express.json({ limit: '2mb' }));
 app.use(morgan(env.NODE_ENV === 'production' ? 'combined' : 'dev'));
+app.use(accessLogger());
 
 app.use('/api/v1', routes);
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, { explorer: true }));

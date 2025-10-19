@@ -18,7 +18,9 @@
     "seed:indicadores": "ts-node-dev --transpile-only -r tsconfig-paths/register src/scripts/seed-indicadores.ts",
     "check:users": "ts-node-dev --transpile-only -r tsconfig-paths/register src/scripts/check-users.ts",
     "migrate:user-profiles": "ts-node-dev --transpile-only -r tsconfig-paths/register src/scripts/migrate-user-profiles.ts",
-    "validate:profiles": "ts-node-dev --transpile-only -r tsconfig-paths/register src/scripts/validate-profiles.ts"
+    "validate:profiles": "ts-node-dev --transpile-only -r tsconfig-paths/register src/scripts/validate-profiles.ts",
+    "seed:access-logs": "ts-node-dev --transpile-only -r tsconfig-paths/register src/scripts/seed-access-logs.ts",
+    "cleanup:tokens": "ts-node-dev --transpile-only -r tsconfig-paths/register src/scripts/cleanup-tokens.ts"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
