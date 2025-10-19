@@ -3,7 +3,7 @@ import jwt, { SignOptions } from 'jsonwebtoken';
 
 export interface JWTPayload {
   sub: string;
-  perfil: 'admin' | 'gestor_regional' | 'gestor_unidade' | 'auditor';
+  perfil: 'admin' | 'DIRETOR' | 'ADJUNTO' | 'GERENTE DE PROJETO';
   unidadeCodigo?: string;
   regioes?: string[];
 }

@@ -4,7 +4,7 @@ declare module 'express-serve-static-core' {
   interface Request {
     user?: {
       sub: string;
-      perfil: 'admin' | 'gestor_regional' | 'gestor_unidade' | 'auditor';
+      perfil: 'admin' | 'DIRETOR' | 'ADJUNTO' | 'GERENTE DE PROJETO';
       unidadeCodigo?: string;
       regioes?: string[];
     };

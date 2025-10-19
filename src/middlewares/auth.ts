@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { env } from '../config/env';
 
-type UserPerfil = "admin" | "gestor_regional" | "gestor_unidade" | "auditor";
+type UserPerfil = "admin" | "DIRETOR" | "ADJUNTO" | "GERENTE DE PROJETO";
 
 export function auth(roles: Array<UserPerfil> = []) {
   return (req: Request, res: Response, next: NextFunction) => {
