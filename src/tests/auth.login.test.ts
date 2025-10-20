@@ -11,7 +11,7 @@ describe('POST /auth/login', () => {
     const hash = await bcrypt.hash('Senha@123', 10);
     await User.findOneAndUpdate(
       { email: 'admin@ptl.gov' },
-      { email: 'admin@ptl.gov', nome: 'Admin', senhaHash: hash, perfil: 'admin', ativo: true },
+      { email: 'admin@ptl.gov', nome: 'Admin', senhaHash: hash, perfil: 'ADMIN', ativo: true },
       { upsert: true, new: true }
     );
   });
@@ -27,7 +27,7 @@ describe('POST /auth/login', () => {
 
     expect(res.status).toBe(200);
     expect(res.body).toHaveProperty('access_token');
-    expect(res.body.perfil).toBe('admin');
+    expect(res.body.perfil).toBe('ADMIN');
   });
 
   it('deve falhar com senha errada', async () => {

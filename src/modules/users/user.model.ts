@@ -4,7 +4,7 @@ const UserSchema = new Schema({
   email: { type: String, unique: true, required: true, index: true },
   nome: { type: String, required: true },
   senhaHash: { type: String, required: true },
-  perfil: { type: String, enum: ['admin','DIRETOR','ADJUNTO','GERENTE DE PROJETO'], required: true },
+  perfil: { type: String, enum: ['ADMIN','DIRETOR','ADJUNTO','GERENTE DE PROJETO'], required: true },
   unidadeCodigo: { type: String },
   regioes: [{ type: String }],
   ativo: { type: Boolean, default: true }
@@ -15,7 +15,7 @@ export type UserDoc = {
   email: string;
   nome: string;
   senhaHash: string;
-  perfil: 'admin'|'DIRETOR'|'ADJUNTO'|'GERENTE DE PROJETO';
+  perfil: 'ADMIN'|'DIRETOR'|'ADJUNTO'|'GERENTE DE PROJETO';
   unidadeCodigo?: string;
   regioes?: string[];
   ativo: boolean;

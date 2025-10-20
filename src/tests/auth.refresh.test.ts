@@ -32,7 +32,7 @@ describe('Auth Endpoints', () => {
       email: 'test@auth.local',
       nome: 'Test User',
       senhaHash,
-      perfil: 'admin',
+      perfil: 'ADMIN',
       ativo: true
     });
   });
@@ -50,7 +50,7 @@ describe('Auth Endpoints', () => {
       expect(response.body).toHaveProperty('access_token');
       expect(response.body).toHaveProperty('refresh_token');
       expect(response.body).toHaveProperty('token_type', 'Bearer');
-      expect(response.body).toHaveProperty('perfil', 'admin');
+      expect(response.body).toHaveProperty('perfil', 'ADMIN');
       expect(response.body).toHaveProperty('nome', 'Test User');
 
       accessToken = response.body.access_token;

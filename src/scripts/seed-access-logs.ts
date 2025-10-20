@@ -9,7 +9,7 @@ async function seedAccessLogs() {
   console.log('🌱 Criando logs de acesso de exemplo...\n');
   
   // Buscar o usuário admin
-  const admin = await User.findOne({ perfil: 'admin' }).lean();
+  const admin = await User.findOne({ perfil: 'ADMIN' }).lean();
   if (!admin) {
     console.log('❌ Usuário admin não encontrado. Execute npm run seed:admin primeiro.');
     process.exit(1);

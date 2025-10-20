@@ -11,7 +11,7 @@ async function run() {
 
   const up = await User.findOneAndUpdate(
     { email },
-    { email, nome: 'Admin PTL', senhaHash: hash, perfil: 'admin', ativo: true },
+    { email, nome: 'Admin PTL', senhaHash: hash, perfil: 'ADMIN', ativo: true },
     { upsert: true, new: true }
   );
 

@@ -2,7 +2,7 @@ import 'dotenv/config';
 import { connectDB } from '@/config/db';
 import { User } from '@/modules/users/user.model';
 
-const PERFIS_VALIDOS = ['admin', 'DIRETOR', 'ADJUNTO', 'GERENTE DE PROJETO'];
+const PERFIS_VALIDOS = ['ADMIN', 'DIRETOR', 'ADJUNTO', 'GERENTE DE PROJETO'];
 
 async function validateAndFixProfiles() {
   await connectDB();

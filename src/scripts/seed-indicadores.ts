@@ -25,7 +25,7 @@ async function runSeed() {
     email: 'admin@ptl.local',
     nome: 'Administrador Geral',
     senhaHash,
-    perfil: 'admin',
+    perfil: 'ADMIN',
     ativo: true
   });
 

@@ -8,6 +8,7 @@ async function seed() {
   const senha = 'Senha@123';
   const senhaHash = await bcrypt.hash(senha, 10);
   const users = [
+    { perfil: 'ADMIN', email: 'admin@ptl.local', nome: 'Admin', senhaHash },
     { perfil: 'GERENTE DE PROJETO', email: 'gerente@test.local', nome: 'Gerente', senhaHash },
     { perfil: 'DIRETOR', email: 'diretor@test.local', nome: 'Diretor', senhaHash },
     { perfil: 'ADJUNTO', email: 'adjunto@test.local', nome: 'Adjunto', senhaHash }

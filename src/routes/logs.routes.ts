@@ -65,7 +65,7 @@ import { AccessLog } from '@/modules/logs/access-log.model';
 
 export const router = Router();
 
-router.get('/access', auth(['admin']), async (req, res) => {
+router.get('/access', auth(['ADMIN']), async (req, res) => {
   try {
     const {
       page,
@@ -198,7 +198,7 @@ router.get('/access', auth(['admin']), async (req, res) => {
  *         description: Estatísticas dos logs
  */
 
-router.get('/access/stats', auth(['admin']), async (req, res) => {
+router.get('/access/stats', auth(['ADMIN']), async (req, res) => {
   try {
     const { startDate, endDate } = req.query as {
       startDate?: string;

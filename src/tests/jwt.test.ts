@@ -24,7 +24,7 @@ describe('JWT Utils', () => {
       email: 'test@jwt.local',
       nome: 'Test User',
       senhaHash: 'hashedpassword',
-      perfil: 'admin',
+      perfil: 'ADMIN',
       ativo: true
     });
     testUserId = String(testUser._id);
@@ -46,7 +46,7 @@ describe('JWT Utils', () => {
     it('should generate a valid access token', () => {
       const payload = {
         sub: testUserId,
-        perfil: 'admin' as const,
+        perfil: 'ADMIN' as const,
         unidadeCodigo: 'TEST-001',
         regioes: ['TESTE']
       };
@@ -60,7 +60,7 @@ describe('JWT Utils', () => {
     it('should verify a valid access token', () => {
       const payload = {
         sub: testUserId,
-        perfil: 'admin' as const,
+        perfil: 'ADMIN' as const,
         unidadeCodigo: 'TEST-001'
       };
 
@@ -69,7 +69,7 @@ describe('JWT Utils', () => {
 
       expect(decoded).toBeDefined();
       expect(decoded!.sub).toBe(testUserId);
-      expect(decoded!.perfil).toBe('admin');
+      expect(decoded!.perfil).toBe('ADMIN');
       expect(decoded!.tokenType).toBe('access');
     });
 
@@ -81,7 +81,7 @@ describe('JWT Utils', () => {
     it('should return null for blacklisted token', () => {
       const payload = {
         sub: testUserId,
-        perfil: 'admin' as const
+        perfil: 'ADMIN' as const
       };
 
       const token = signAccessToken(payload);

@@ -30,7 +30,7 @@ export const router = Router();
  *     responses:
  *       200: { description: Processado }
  */
-router.post('/', auth(['admin','DIRETOR','ADJUNTO','GERENTE DE PROJETO']), upload.single('file'), async (req, res) => {
+router.post('/', auth(['ADMIN','DIRETOR','ADJUNTO','GERENTE DE PROJETO']), upload.single('file'), async (req, res) => {
   if (!req.file) return res.status(400).json({ message: 'arquivo ausente' });
   try {
     const r = await processFile(req.file.path);

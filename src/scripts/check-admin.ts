@@ -7,7 +7,7 @@ async function checkAdminUser() {
   
   console.log('🔍 Verificando usuário admin...\n');
   
-  const admin = await User.findOne({ perfil: 'admin' }).lean();
+  const admin = await User.findOne({ perfil: 'ADMIN' }).lean();
   
   if (admin) {
     console.log('👤 Usuário admin encontrado:');

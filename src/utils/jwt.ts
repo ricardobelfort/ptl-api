@@ -5,7 +5,7 @@ import { RefreshToken, RefreshTokenDoc } from '@/modules/auth/refresh-token.mode
 
 export interface JWTPayload {
   sub: string;
-  perfil: 'admin' | 'DIRETOR' | 'ADJUNTO' | 'GERENTE DE PROJETO';
+  perfil: 'ADMIN' | 'DIRETOR' | 'ADJUNTO' | 'GERENTE DE PROJETO';
   unidadeCodigo?: string;
   regioes?: string[];
   tokenType?: 'access' | 'refresh';

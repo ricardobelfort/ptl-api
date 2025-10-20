@@ -3,7 +3,7 @@ import app from '../app';
 import { signAccessToken } from '../utils/jwt';
 
 describe('indicadores', () => {
-  const token = signAccessToken({ sub: 't1', perfil: 'admin' });
+  const token = signAccessToken({ sub: 't1', perfil: 'ADMIN' });
 
   it('GET /indicadores/kpis -> 200', async () => {
     const res = await request(app)

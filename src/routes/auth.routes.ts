@@ -187,7 +187,7 @@ const logoutSchema = z.object({
 });
 
 // Endpoint para logout específico
-router.post('/logout', auth(['admin', 'DIRETOR', 'ADJUNTO', 'GERENTE DE PROJETO']), async (req, res) => {
+router.post('/logout', auth(['ADMIN', 'DIRETOR', 'ADJUNTO', 'GERENTE DE PROJETO']), async (req, res) => {
   try {
     const { refresh_token } = logoutSchema.parse(req.body);
 
@@ -212,7 +212,7 @@ router.post('/logout', auth(['admin', 'DIRETOR', 'ADJUNTO', 'GERENTE DE PROJETO'
 });
 
 // Endpoint para logout global (todos os dispositivos)
-router.post('/logout-all', auth(['admin', 'DIRETOR', 'ADJUNTO', 'GERENTE DE PROJETO']), async (req, res) => {
+router.post('/logout-all', auth(['ADMIN', 'DIRETOR', 'ADJUNTO', 'GERENTE DE PROJETO']), async (req, res) => {
   try {
     const userId = req.user!.sub;
 

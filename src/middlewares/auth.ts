@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { verifyAccessToken, isTokenBlacklisted } from '../utils/jwt';
 
-type UserPerfil = "admin" | "DIRETOR" | "ADJUNTO" | "GERENTE DE PROJETO";
+type UserPerfil = "ADMIN" | "DIRETOR" | "ADJUNTO" | "GERENTE DE PROJETO";
 
 export function auth(roles: Array<UserPerfil> = []) {
   return (req: Request, res: Response, next: NextFunction) => {

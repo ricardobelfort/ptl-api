@@ -43,7 +43,7 @@ const updateInternoSchema = z.object({
  *               items:
  *                 $ref: '#/components/schemas/Interno'
  */
-router.get('/', auth(["DIRETOR", "ADJUNTO", "GERENTE DE PROJETO"]), async (_req, res) => {
+router.get('/', auth(["ADMIN", "DIRETOR", "ADJUNTO", "GERENTE DE PROJETO"]), async (_req, res) => {
   const internos = await Interno.find();
   res.json(internos);
 });
@@ -83,7 +83,7 @@ router.get('/', auth(["DIRETOR", "ADJUNTO", "GERENTE DE PROJETO"]), async (_req,
  *                   items:
  *                     type: object
  */
-router.post('/', auth(["GERENTE DE PROJETO"]), async (req, res) => {
+router.post('/', auth(["ADMIN", "GERENTE DE PROJETO"]), async (req, res) => {
   const parse = createInternoSchema.safeParse(req.body);
   if (!parse.success) {
     return res.status(400).json({ message: 'Dados inválidos', errors: parse.error.issues });
@@ -136,7 +136,7 @@ router.post('/', auth(["GERENTE DE PROJETO"]), async (req, res) => {
  *       404:
  *         description: Interno não encontrado
  */
-router.put('/:id', auth(["GERENTE DE PROJETO"]), async (req: any, res: any) => {
+router.put('/:id', auth(["ADMIN", "GERENTE DE PROJETO"]), async (req: any, res: any) => {
   const parse = updateInternoSchema.safeParse(req.body);
   if (!parse.success) {
     return res.status(400).json({ message: 'Dados inválidos', errors: parse.error.issues });

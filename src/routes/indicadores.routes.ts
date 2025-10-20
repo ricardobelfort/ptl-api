@@ -10,7 +10,7 @@ import { Indicador } from '../modules/indicadores/indicador.model';
  */
 export const router = Router();
 
-router.get('/kpis', auth(['admin','DIRETOR','ADJUNTO','GERENTE DE PROJETO']), async (req, res) => {
+router.get('/kpis', auth(['ADMIN','DIRETOR','ADJUNTO','GERENTE DE PROJETO']), async (req, res) => {
   const { competencia, unidadeCodigo } = req.query as { competencia?: string; unidadeCodigo?: string; };
   const filtro: any = {};
   if (competencia) filtro.competencia = competencia;

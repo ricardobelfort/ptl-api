@@ -14,7 +14,7 @@ describe('RefreshToken Model', () => {
       email: 'test@model.local',
       nome: 'Test User',
       senhaHash: 'hashedpassword',
-      perfil: 'admin',
+      perfil: 'ADMIN',
       ativo: true
     });
     testUserId = String(testUser._id);
