@@ -3,6 +3,7 @@ import { router as auth } from './auth.routes';
 import { router as uploads } from './uploads.routes';
 import { router as indicadores } from './indicadores.routes';
 import { router as logs } from './logs.routes';
+import internosRouter from './internos.routes';
 
 const r = Router();
 /**
@@ -20,5 +21,6 @@ r.use('/auth', auth);
 r.use('/uploads', uploads);
 r.use('/indicadores', indicadores);
 r.use('/logs', logs);
+r.use('/internos', internosRouter);
 
 export default r;
